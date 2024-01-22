@@ -1,9 +1,11 @@
 import MedicalHistoryContainer from "./MedicalHistoryContainer";
-
+import { MedicalHistoryContextProvider } from "./MedicalHistoryContext";
 const MedicalHistoryPage = () => {
   return (
     <>
-      <MedicalHistoryContainer />
+      <MedicalHistoryContextProvider>
+        <MedicalHistoryContainer />
+      </MedicalHistoryContextProvider>
     </>
   );
 };

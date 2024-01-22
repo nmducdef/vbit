@@ -1,10 +1,11 @@
 import { Card } from "antd";
-import { Col, Row, Input, Button } from "antd";
+import { Col, Row, Input } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import loginUser from "../../../redux/apiRequest";
 import { useDispatch } from "react-redux";
+import LoginAPI from "../../../api/LoginAPI";
+import { authActions } from "../../../redux/slice/authSlice";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -18,8 +19,32 @@ const LoginForm = () => {
       username: username,
       password: password,
     };
-    loginUser(newUser, dispatch, navigate);
+    const login = async (newUser) => {
+      const response = await LoginAPI.login(newUser);
+      if (response && response.data) {
+        if (response.data.success === true) {
+          localStorage.setItem("jwt", response.data.data.token);
+          // console.log(response.data.data.token);
+          dispatch(authActions.setToken(response.data.data.token));
+          dispatch(
+            authActions.setVisitor({
+              id: response.data.data.id,
+              fullname: response.data.data?.fullname,
+              hisId: response.data.data?.hisId,
+              patientInfo: response.data.data?.patientInfo,
+            })
+          );
+          navigate("/lich-su-kham-benh");
+        }
+
+        if (response.data.success === false) {
+          alert("lỗi");
+        }
+      }
+    };
+    login(newUser, dispatch);
   };
+
   return (
     <>
       <Card
@@ -64,6 +89,7 @@ const LoginForm = () => {
                       size="large"
                       addonBefore={<UserOutlined />}
                       onChange={(e) => setUsername(e.target.value)}
+                      required
                     />
                     <h3 style={{ margin: "10px" }}>Mật khẩu</h3>
                     <Input.Password
@@ -71,12 +97,12 @@ const LoginForm = () => {
                       addonBefore={<LockOutlined />}
                       placeholder="input password"
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
-                    <button type="submit">Đăng nhập</button>
+                    <button className="btn" type="submit">
+                      <p>Đăng nhập</p>
+                    </button>
                   </form>
-                  <Link to="/lich-su-kham-benh" color="white">
-                    Đi tới trang MedicalHistory
-                  </Link>
                 </Col>
               </Row>
             </div>

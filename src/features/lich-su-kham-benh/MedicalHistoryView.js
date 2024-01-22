@@ -1,13 +1,16 @@
 import { Card } from "antd";
 import { Table, Button, Drawer, Tabs } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import VideoHinhAnhPage from "../video-hinh-anh/VideoHinhAnhPage";
 import ChuanDoanHinhAnhPage from "../chuan-doan-hinh-anh/ChuanDoanHinhAnhPage";
 import BoxDataComponent from "../thong-tin-benh-nhan";
 import ThongTinBenhNhanPage from "../thongtinbenhnhan/ThongTinBenhNhanPage";
 
+import { useMedicalHistoryContext } from "./MedicalHistoryContext";
+
 const MedicalHistoryView = () => {
-  const onChange = () => {};
+  const { selectedId, data, setContext } = useMedicalHistoryContext();
+  console.log(selectedId);
   const items = [
     {
       key: "1",
@@ -34,34 +37,49 @@ const MedicalHistoryView = () => {
   const columns = [
     {
       title: "Ngày khám",
-      dataIndex: "ngay_kham",
+      dataIndex: "inputDate",
+      key: "inputDate",
     },
     {
       title: "Mã khám",
-      dataIndex: "ma_kham",
+      dataIndex: "patientCode",
+      key: "patientCode",
     },
     {
       title: "Đơn vị chỉ định",
-      dataIndex: "don_vi_chi_dinh",
+      dataIndex: "departmentName",
+      key: "departmentName",
     },
     {
-      title: "Chuẩn đoán",
-      dataIndex: "chuan_doan",
+      title: "Chẩn đoán",
+      dataIndex: "diagnostic",
+      key: "diagnostic",
     },
     {
       title: "Bác sĩ chỉ định",
-      dataIndex: "bac_si_chi_dinh",
+      dataIndex: "doctorassignName",
+      key: "doctorassignName",
     },
     {
       title: "Đối tượng",
-      dataIndex: "doi_tuong",
+      dataIndex: "objecttypeName",
+      key: "objecttypeName",
     },
     {
       title: "Chi tiết",
       dataIndex: "chi_tiet",
       render: (_, record) => (
         <>
-          <Button type="primary" onClick={() => showDrawer(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setContext((prev) => ({
+                ...prev,
+                selectedId: record.patientInfoId,
+              }));
+              setOpen(true);
+            }}
+          >
             Chi tiết
           </Button>
           <Drawer
@@ -83,45 +101,19 @@ const MedicalHistoryView = () => {
       ),
     },
   ];
-  const data = [
-    {
-      key: "1",
-      ngay_kham: "20/10/2003",
-      ma_kham: "17102003",
-      don_vi_chi_dinh: "Khoa Nội tổng hợp",
-      chuan_doan: "",
-      bac_si_chi_dinh: "",
-      doi_tuong: "Bảo hiểm y tế",
-      chi_tiet: "Chi tiết",
-    },
-    {
-      key: "1",
-      ngay_kham: "20/10/2003",
-      ma_kham: "17102003",
-      don_vi_chi_dinh: "Khoa Nội tổng hợp",
-      chuan_doan: "",
-      bac_si_chi_dinh: "",
-      doi_tuong: "Bảo hiểm y tế",
-      chi_tiet: "Chi tiết",
-    },
-  ];
 
   const [open, setOpen] = useState(false);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
   const onClose = () => {
     setOpen(false);
   };
+  const onChange = () => {};
 
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Card
           style={{
-            width: "80vw ",
+            width: "80vw",
           }}
           title="Card title"
           bordered={false}

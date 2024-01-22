@@ -1,7 +1,13 @@
 import { Col, Row } from "antd";
 import { Card } from "antd";
+// import { useBoxUserInforContext } from "./ThongTinBenhNhanContext";
+import { useContext } from "react";
+import { MedicalHistoryContext } from "../lich-su-kham-benh/MedicalHistoryContext";
+import BoxUserInforContext from "./ThongTinBenhNhanContext";
 
 const ThongTinBenhNhanView = () => {
+  const { dataMedicalHistory } = useContext(BoxUserInforContext);
+  console.log(dataMedicalHistory);
   return (
     <>
       <Row>
@@ -16,10 +22,10 @@ const ThongTinBenhNhanView = () => {
             }}
           >
             <p>
-              <strong>Họ và tên: </strong> NGUYỄN MINH ĐỨC
+              <strong>Họ và tên: </strong> {dataMedicalHistory.patientName}
             </p>
             <p>
-              <strong>Ngày sinh: </strong> 1 - 1 - 2000
+              <strong>Ngày sinh: </strong> {dataMedicalHistory.patientBirth}
             </p>
             <p>
               <strong>Giới tính: </strong> Nam
@@ -28,7 +34,7 @@ const ThongTinBenhNhanView = () => {
               <strong>Số điện thoại: </strong> 0123456789
             </p>
             <p>
-              <strong>Địa chỉ: </strong> Long Biên, Hà Nội
+              <strong>Địa chỉ: </strong> {dataMedicalHistory.patientAddress}
             </p>
           </Card>
         </Col>
@@ -43,16 +49,17 @@ const ThongTinBenhNhanView = () => {
             }}
           >
             <p>
-              <strong>Mã lần khám: </strong> 23000203
+              <strong>Mã lần khám: </strong> {dataMedicalHistory.numberCard}
             </p>
             <p>
-              <strong>Khoa/Phòng chỉ định: </strong> Khoa Nội tổng hợp
+              <strong>Khoa/Phòng chỉ định: </strong>{" "}
+              {dataMedicalHistory.departmentName}
             </p>
             <p>
               <strong>Bác sĩ chỉ định: </strong> Nam
             </p>
             <p>
-              <strong>Đối tượng: </strong> Bảo hiểm y tế
+              <strong>Đối tượng: </strong> {dataMedicalHistory.objecttypeName}
             </p>
             <p>
               <strong>Chẩn đoán: </strong>
